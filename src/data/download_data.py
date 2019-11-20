@@ -144,7 +144,7 @@ class Contents():
         "Host": "pikabu.ru",
         "Origin": "pikabu.ru"
     }
-    START_DATE = datetime.date(2009, 12, 31)
+    START_DATE = datetime.date(2008, 1, 1)
 
     def __init__(self,
                  sorting_method: Literal[POST_SORTING_METHODS.keys()],
@@ -152,8 +152,7 @@ class Contents():
         self.posts = []
         postfix = Contents.POST_SORTING_METHODS[sorting_method]
         if sorting_method == "search":
-            day_number = post_date - Contents.START_DATE
-            day_number = day_number.days
+            day_number = (post_date - Contents.START_DATE).days
             postfix += "?d=" + str(day_number) + "&"
         else:
             postfix += "?"
@@ -216,11 +215,6 @@ def main(output_dir_path: str,
             contents.data.to_csv(output_dir_path + FILENAME.format(cur_date),
                                  encoding='utf-8',
                                  index=False)
-
-            # check dor duplicate posts
-            # df = pd.read_csv(output_dir_path + FILENAME.format(cur_date),
-            #                  index_col=0)
-            # assert pd.concat(g for _, g in df.groupby("url") if len(g) > 1).empty, "Found duplicate posts"
 
             logger.info("successfully downloaded data for " + str(cur_date))
         except Exception:
