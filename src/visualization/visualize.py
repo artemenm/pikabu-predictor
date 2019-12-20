@@ -23,7 +23,7 @@ def get_csv_files(path):
 
 def get_path(dir):
     project_dir = os.path.abspath('')
-    image_dir = os.path.join(*dir)
+    image_dir = os.path.join(project_dir, *dir)
     path = os.path.join(project_dir , image_dir)
     return path
 
@@ -35,6 +35,10 @@ def get_tags():
         df = pd.read_csv(os.path.join(path, filename))
         all_tags += collect_all_data(df)
     tags_and_counts = Counter(all_tags)
+    popular_tags = []
+    for i in range(50):
+        popular_tags.append(tags_and_counts.most_common(50)[i][0])
+    print(popular_tags)
     return tags_and_counts
 
 def create_wordcloud(tags_and_counts):

@@ -79,6 +79,9 @@ class Post():
             tag_data = tag.get("data-tag")
             if tag_data:
                 tags.append(tag_data)
+        all_tags = html_text.findAll(attrs = ['tags__tag tags__tag_highlight'])
+        if len(all_tags) > 0:
+            tags.append("моё")
         self.tags = tags
 
     def get_title(self, html_text):
@@ -207,7 +210,7 @@ def main(output_dir_path: str,
     logger.info("downloading data...")
 
     for cur_date in daterange(start_date, end_date):
-        try:
+        #try:
             contents = Contents("search", cur_date)
             contents.download_posts()
             contents.create_dataframe(exclude=["author_rating"])
@@ -216,9 +219,9 @@ def main(output_dir_path: str,
                                  encoding='utf-8',
                                  index=False)
 
-            logger.info("successfully downloaded data for " + str(cur_date))
-        except Exception:
-            logger.error("failed to download data for " + str(cur_date))
+        #    logger.info("successfully downloaded data for " + str(cur_date))
+        #except Exception:
+        #    logger.error("failed to download data for " + str(cur_date))
 
     logger.info("data downloading finished")
 
@@ -231,6 +234,6 @@ if __name__ == "__main__":
     load_dotenv(find_dotenv())
 
     project_dir = Path(__file__).resolve().parents[2]
-    dirname = os.path.join(project_dir, "data/raw/")
+    dirname = os.path.join(project_dir, os.path.join("data", "raw"))
 
     main(dirname, datetime.date(2019, 11, 2), datetime.date(2019, 11, 3))
